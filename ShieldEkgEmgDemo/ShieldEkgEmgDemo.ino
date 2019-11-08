@@ -46,7 +46,6 @@ struct Olimexino328_packet
 #include <compat/deprecated.h>
 #include <FlexiTimer2.h>
 //http://www.arduino.cc/playground/Main/FlexiTimer2
-
 // All definitions
 #define NUMCHANNELS 6
 #define HEADERLEN 4
