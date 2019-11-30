@@ -65,3 +65,24 @@ float calibr_max_signal(float sig, float koef)
   }
   return calibr_max;
 }
+
+float latency_point(float signal_filt, float l_on, float l_off, float calibr_max, float calibr_min)
+{
+  float N = 0;
+  float latenced_sig = 0;
+  if (signal_filt <= calibr_max && signal_filt >= calibr_min)
+  {
+    for (int i = 0; i <= l_on; i++)
+    {
+      latenced_sig = 1;
+    }
+  }
+  else if (signal_filt > calibr_max || signal_filt < calibr_min)
+  {
+    for (int i = 0; i <= l_off; i++)
+    {
+      latenced_sig = 0;
+    }
+  }
+  return latenced_sig;
+}
