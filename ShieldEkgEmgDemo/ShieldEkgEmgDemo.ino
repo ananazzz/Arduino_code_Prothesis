@@ -44,27 +44,14 @@ struct Olimexino328_packet
 */
 /**********************************************************/
 #include <compat/deprecated.h>
-#include <FlexiTimer2.h>
 #include <EmgLibrary.h>
-//http://www.arduino.cc/playground/Main/FlexiTimer2
-// All definitions
-#define NUMCHANNELS 6
-#define HEADERLEN 4
-#define PACKETLEN (NUMCHANNELS * 2 + HEADERLEN + 1)
-#define SAMPFREQ 256                      // ADC sampling rate 256
-#define TIMER2VAL (1024/(SAMPFREQ))       // Set 256Hz sampling frequency                    
-#define LED1  13
-#define CAL_SIG 9
 
+int th_min = -1;
 int it = 0;
 int pinADC=0;
-// Global constants and variables
-volatile unsigned char TXBuf[PACKETLEN];  //The transmission packet
-volatile unsigned char TXIndex;           //Next byte to write in the transmission packet.
-volatile unsigned char CurrentCh;         //Current channel being sampled.
-volatile unsigned char counter = 0;	  //Additional divider used to generate CAL_SIG
-volatile unsigned int ADC_Value = 0;	  //ADC current value
-
+int input_value = 0;
+int LED1 = 13;
+int CAL_SIG = 5; //??????
 //~~~~~~~~~~
 // Functions
 //~~~~~~~~~~
@@ -108,6 +95,11 @@ void setup()
  adc_init();
  timer1_init();
  interrupts();  // Enable all interrupts after initialization has been completed
+ 
+ while(it < 1000){
+  th_min = calibr_max_signal(input_value, 0.05);
+ }
+ 
 }
 
 
@@ -120,12 +112,14 @@ void loop() {
 
 ISR(TIMER1_COMPA_vect)
 {
-   it++;
-   if( it > 65000) it = 0;
-   Serial.print(it);
-   Serial.print(',');
-   Serial.print(adc_read(pinADC));
-   Serial.print('\n');
+  it++;
+  input_value = adc_read(pinADC);
+  if( th_min == -1 && it < 5000){ 
+    th_min = calibr_max_signal(input_value, 0.05);
+  }
+  Serial.println(th_min);
+   //Serial.print(input_value);
+   //Serial.print('\n');
 }
 
 void adc_init(){
