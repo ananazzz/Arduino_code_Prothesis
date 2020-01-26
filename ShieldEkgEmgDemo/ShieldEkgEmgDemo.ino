@@ -56,6 +56,7 @@ struct Olimexino328_packet
 #define LED1  13
 #define CAL_SIG 9
 
+int it = 0;
 int pinADC=0;
 // Global constants and variables
 volatile unsigned char TXBuf[PACKETLEN];  //The transmission packet
@@ -119,14 +120,18 @@ void loop() {
 
 ISR(TIMER1_COMPA_vect)
 {
-   Serial.println(adc_read(pinADC));
+   it++;
+   if( it > 65000) it = 0;
+   Serial.print(it);
+   Serial.print(',');
+   Serial.print(adc_read(pinADC));
+   Serial.print('\n');
 }
 
 void adc_init(){
      
     ADMUX = (1<<REFS0); //AVCC with external capacitor at AREF pin = 5V
     ADCSRA = (1<<ADEN)|(1<<ADPS0);// ADC enable and system clock div 2
-    Serial.println("ADC_init");
 }
 
 static uint16_t adc_read(int pin)
@@ -150,6 +155,5 @@ void timer1_init()
 
    TIMSK1 |= (1<<TOIE1)|(1<<OCIE1A);
 
-   Serial.println("Timer1_init");
    sei();               
 }
