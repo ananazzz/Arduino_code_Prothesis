@@ -114,12 +114,11 @@ ISR(TIMER1_COMPA_vect)
 {
   it++;
   input_value = adc_read(pinADC);
-  if( th_min == -1 && it < 5000){ 
-    th_min = calibr_max_signal(input_value, 0.05);
-  }
-  Serial.println(th_min);
-   //Serial.print(input_value);
-   //Serial.print('\n');
+//  if( th_min == -1 && it < 5000){ 
+//    th_min = calibr_max_signal(input_value, 0.05);
+//  }
+  Serial.print(input_value);
+  Serial.print('\n');
 }
 
 void adc_init(){
