@@ -1,48 +1,3 @@
-/**********************************************************/
-/* Demo program for:                                      */
-/*    Board: SHIELD-EKG/EMG + Olimexino328                */
-/*  Manufacture: OLIMEX                                   */
-/*  COPYRIGHT (C) 2012                                    */
-/*  Designed by:  Penko Todorov Bozhkov                   */
-/*   Module Name:   Sketch                                */
-/*   File   Name:   ShieldEkgEmgDemo.ino                  */
-/*   Revision:  Rev.A                                     */
-/*    -> Added is suppport for all Arduino boards.        */
-/*       This code could be recompiled for all of them!   */
-/*   Date: 19.12.2012                                     */
-/*   Built with Arduino C/C++ Compiler, version: 1.0.3    */
-/**********************************************************/
-/**********************************************************
-Purpose of this programme is to give you an easy way to 
-connect Olimexino328 to ElectricGuru(TM), see:
-https://www.olimex.com/Products/EEG/OpenEEG/EEG-SMT/resources/ElecGuru40.zip
-where you'll be able to observe yours own EKG or EMG signal.
-It is based on:
-***********************************************************
-* ModularEEG firmware for one-way transmission, v0.5.4-p2
-* Copyright (c) 2002-2003, Joerg Hansmann, Jim Peters, Andreas Robinson
-* License: GNU General Public License (GPL) v2
-***********************************************************
-For proper communication packet format given below have to be supported:
-///////////////////////////////////////////////
-////////// Packet Format Version 2 ////////////
-///////////////////////////////////////////////
-// 17-byte packets are transmitted from Olimexino328 at 256Hz,
-// using 1 start bit, 8 data bits, 1 stop bit, no parity, 57600 bits per second.
-
-// Minimial transmission speed is 256Hz * sizeof(Olimexino328_packet) * 10 = 43520 bps.
-
-struct Olimexino328_packet
-{
-  uint8_t	sync0;		// = 0xa5
-  uint8_t	sync1;		// = 0x5a
-  uint8_t	version;	// = 2 (packet version)
-  uint8_t	count;		// packet counter. Increases by 1 each packet.
-  uint16_t	data[6];	// 10-bit sample (= 0 - 1023) in big endian (Motorola) format.
-  uint8_t	switches;	// State of PD5 to PD2, in bits 3 to 0.
-};
-*/
-/**********************************************************/
 #include <compat/deprecated.h>
 #include <EmgLibrary.h>
 
@@ -117,7 +72,7 @@ ISR(TIMER1_COMPA_vect)
 //  if( th_min == -1 && it < 5000){ 
 //    th_min = calibr_max_signal(input_value, 0.05);
 //  }
-  Serial.print(input_value);
+  Serial.print(int(derivative(float(input_value))));
   Serial.print('\n');
 }
 
