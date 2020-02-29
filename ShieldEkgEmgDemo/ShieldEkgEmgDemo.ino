@@ -72,7 +72,7 @@ ISR(TIMER1_COMPA_vect)
 //  if( th_min == -1 && it < 5000){ 
 //    th_min = calibr_max_signal(input_value, 0.05);
 //  }
-  Serial.print(int(derivative(float(input_value))));
+  Serial.print(int(low_pass_filter(derivative(float(input_value)),0.05)));
   Serial.print('\n');
 }
 
