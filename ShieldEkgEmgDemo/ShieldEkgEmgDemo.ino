@@ -60,9 +60,9 @@ void setup()
 
 
 void loop() {
-  
+
  __asm__ __volatile__ ("sleep");
- 
+
 }
 
 ISR(TIMER1_COMPA_vect)
@@ -72,8 +72,19 @@ ISR(TIMER1_COMPA_vect)
 //  if( th_min == -1 && it < 5000){ 
 //    th_min = calibr_max_signal(input_value, 0.05);
 //  }
-  Serial.print(int(low_pass_filter(derivative(float(input_value)),0.05)));
-  Serial.print('\n');
+  //Serial.print(int(low_pass_filter(derivative(float(input_value)),0.05)));
+  int temp = int(low_pass_filter(derivative(float(input_value)),0.01));
+  if(temp < 300 && temp > -300){
+    Serial.print(abs(temp));
+    Serial.print('\n');
+  }
+  else{
+    Serial.print(0);
+    Serial.print('\n');
+  }
+  
+  //Serial.print(int(input_value));
+ 
 }
 
 void adc_init(){
