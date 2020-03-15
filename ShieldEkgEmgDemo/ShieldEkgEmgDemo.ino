@@ -73,9 +73,12 @@ ISR(TIMER1_COMPA_vect)
 //    th_min = calibr_max_signal(input_value, 0.05);
 //  }
   //Serial.print(int(low_pass_filter(derivative(float(input_value)),0.05)));
-  int temp = int(low_pass_filter(derivative(float(input_value)),0.01));
-  if(temp < 300 && temp > -300){
-    Serial.print(abs(temp));
+  //Serial.println(input_value);
+  //int temp = int(derivative(float(input_value)));
+  
+  int temp = input_value;
+  if(temp < 700 && temp > 300){
+    Serial.print(temp);
     Serial.print('\n');
   }
   else{
@@ -93,7 +96,7 @@ void adc_init(){
     ADCSRA = (1<<ADEN)|(1<<ADPS0);// ADC enable and system clock div 2
 }
 
-static uint16_t adc_read(int pin)
+uint16_t adc_read(int pin)
 {
   if (pin < 0 || pin > 5){ //ADC0-ADC5 is available
     return 1; // pin number is out of range
