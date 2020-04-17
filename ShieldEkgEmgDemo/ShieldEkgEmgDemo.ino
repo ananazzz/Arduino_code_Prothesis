@@ -7,6 +7,9 @@ int pinADC=0;
 int input_value = 0;
 int LED1 = 13;
 int CAL_SIG = 5; //??????
+int en1 = 2;
+int in_1 = 3;
+int in_2 = 4;
 //~~~~~~~~~~
 // Functions
 //~~~~~~~~~~
@@ -38,6 +41,18 @@ void toggle_GAL_SIG(void){
  if(digitalRead(CAL_SIG) == HIGH){ digitalWrite(CAL_SIG, LOW); }
  else{ digitalWrite(CAL_SIG, HIGH); }
  
+}
+
+void Motor_activate(en1, in_1, in_2){
+  digitalWrite(en1, HIGH);
+  digitalWrite(in_1, HIGH);
+  digitalWrite(in_2, LOW);
+}
+
+void Motor_disable(en1, in_1, in_2){
+  digitalWrite(en1, LOW);
+  digitalWrite(in_1, LOW);
+  digitalWrite(in_2, LOW); 
 }
 
 void setup() 
@@ -77,13 +92,15 @@ ISR(TIMER1_COMPA_vect)
   //int temp = int(derivative(float(input_value)));
   
   int temp = input_value;
-  if(temp < 700 && temp > 300){
+  if(temp < 700 && temp > th_min){
     Serial.print(temp);
     Serial.print('\n');
+    Motor_activate(en1, in_1, in_2);
   }
   else{
     Serial.print(0);
     Serial.print('\n');
+    Motor_disable(en1, in_1, in_2);
   }
   
   //Serial.print(int(input_value));
